@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% import "_forms.html" as forms %}
+
+
+
+{% block page_header %}
+  <div class="page-header">
+    <h1>{{ order.article }}</h1>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <p>{{ order.article }}<p>
+  <p>{{ order.created.strftime('%H:%M %Y-%m-%d') }}</p>
+  <hr>
+  <h2>(Items)</h2>
+  {% if order.items %}
+    {% for item in order.items %}
+       <p>{{ item.article }}</p>
+       <p>{{ item.name }}</p>
+       <p><strong>{{ item.name }}</strong>
+      {{ item.article }}
+    {% endfor %}
+  {% endif %}
+
+<hr>
+<h2>Add an item</h2>
+<form action="." method="post">
+  {{ forms.render(form) }}
+  <div class="actions">
+    <input type="submit" class="btn primary" value="add item">
+  </div>
+</form>
+
+{% endblock %}

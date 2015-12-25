@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% for order in orders %}
+      <h2><a href="{{ url_for('orders.detail', slug=order.slug) }}">{{ order.article }}</a></h2>
+      <p>{{ order.article }}</p>
+      <p>
+        {{ order.created.strftime('%H:%M %Y-%m-%d') }} |
+        {% with total=order.items|length %}
+            {{ total }} item {%- if total > 1 %}s{%- endif -%}
+        {% endwith %}
+      </p>
+    {% endfor %}
+{% endblock %}
