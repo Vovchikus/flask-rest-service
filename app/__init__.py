@@ -10,7 +10,9 @@ from app import views
 
 def register_blueprints(app):
     from app.views import order_blueprint
+    from app.admin import admin
     app.register_blueprint(order_blueprint)
+    app.register_blueprint(admin)
 
 
 register_blueprints(app)

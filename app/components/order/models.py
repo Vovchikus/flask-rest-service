@@ -5,9 +5,9 @@ from flask import url_for
 
 
 class Item(db.EmbeddedDocument):
-    name = db.StringField(verbose_name='Item', required=True, help_text='Default')
-    cost = db.IntField(verbose_name='Cost', max_length=11, required=True, help_text='Default')
-    weight = db.IntField(verbose_name='Weight', max_length=11, required=True, help_text='Default')
+    name = db.StringField(verbose_name='Item', max_length=255, required=True, help_text='Default')
+    cost = db.IntField(verbose_name='Cost', required=True, help_text='Default')
+    weight = db.IntField(verbose_name='Weight', required=True, help_text='Default')
     article = db.StringField(verbose_name='Article', max_length=255, required=True, help_text='Default')
 
 

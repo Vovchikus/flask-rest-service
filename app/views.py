@@ -8,6 +8,8 @@ order_blueprint = Blueprint('orders', __name__, template_folder='templates')
 
 
 class ListView(MethodView):
+
+    @staticmethod
     def get(self):
         orders = Order.objects.all()
         return render_template('orders/list.html', orders=orders)
@@ -41,10 +43,18 @@ class DetailView(MethodView):
             order = context.get('order')
             order.items.append(item)
             order.save()
-            return redirect(url_for('order.detail', slug=slug))
+            return redirect(url_for('orders.detail', slug=slug))
 
         return render_template('orders/detail.html', **context)
 
 
 order_blueprint.add_url_rule('/orders', view_func=ListView.as_view('list'))
 order_blueprint.add_url_rule('/order/<slug>/', view_func=DetailView.as_view('detail'))
+
+
+# @app.route('/order/add', methods=['GET', 'POST'])
+# def order_add():
+#     order = Order(article='ORDER-0002', slug='ORDER-0002')
+#     item = Item(name='IPHONE-6S', cost=600, weight=3, article='ITEM-0002')
+#     order.items.append(item)
+#     order.save()
