@@ -4,7 +4,7 @@ from app.components.order.models import *
 from flask.ext.mongoengine.wtf import model_form
 from app.components.auth.auth import requires_auth
 
-admin = Blueprint('admin', __name__, template_folder='templates')
+admin_map = Blueprint('admin', __name__, template_folder='templates')
 
 
 class List(MethodView):
@@ -58,6 +58,6 @@ class Detail(MethodView):
 
 
 # Register the urls
-admin.add_url_rule('/admin/', view_func=List.as_view('index'))
-admin.add_url_rule('/admin/create/', defaults={'slug': None}, view_func=Detail.as_view('create'))
-admin.add_url_rule('/admin/<slug>/', view_func=Detail.as_view('edit'))
+admin_map.add_url_rule('/admin/', view_func=List.as_view('index'))
+admin_map.add_url_rule('/admin/create/', defaults={'slug': None}, view_func=Detail.as_view('create'))
+admin_map.add_url_rule('/admin/<slug>/', view_func=Detail.as_view('edit'))
