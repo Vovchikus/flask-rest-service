@@ -11,7 +11,7 @@ db = MongoEngine(app)
 
 
 def register_blueprints(app):
-    from app.views.order import order_map
+    from app.components.order.views import order_map
     from app.views.admin import admin_map
     from app.components.api import api_map
     app.register_blueprint(order_map)
