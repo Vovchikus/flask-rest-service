@@ -1,2 +1,1 @@
-# flask_rest_service
-REST service using Flask
+Example of REST service using Flask framework and Mongoengine
