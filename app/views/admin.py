@@ -1,8 +1,9 @@
 from flask import request, render_template, Blueprint, redirect
-from flask.views import MethodView
-from app.components.order.models import *
 from flask.ext.mongoengine.wtf import model_form
+from flask.views import MethodView
+
 from app.components.auth.auth import requires_auth
+from app.components.model.order import *
 
 admin_map = Blueprint('admin', __name__, template_folder='templates')
 
