@@ -80,8 +80,10 @@ class OrderDetail(Resource):
         return order, 200
 
     @staticmethod
+    @marshal_with(order_format)
     def put(slug):
         response = order_request_parse()
         order_model = Order.objects.get_or_404(slug=slug)
         build_order = order_builder(order_model, response)
-        return build_order, 201
+        build_order.save()
+        return order_model, 201
