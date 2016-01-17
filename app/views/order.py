@@ -3,7 +3,6 @@ from flask.ext.mongoengine.wtf import model_form
 from flask.views import MethodView
 
 from app.components.model.order import *
-from app.components.repository import order as order_repository
 
 order_map = Blueprint('orders', __name__, template_folder='templates')
 
@@ -11,7 +10,7 @@ order_map = Blueprint('orders', __name__, template_folder='templates')
 class ListView(MethodView):
     @staticmethod
     def get():
-        orders = order_repository.get_orders_all()
+        orders = Order.objects.get_orders_all()
         return render_template('orders/list.html', orders=orders)
 
 
@@ -19,7 +18,7 @@ class DetailView(MethodView):
     form = model_form(Item, exclude=['created'])
 
     def get_context(self, slug):
-        order = order_repository.get_order_by_slug(slug=slug)
+        order = Order.objects.get_order_by_slug(slug=slug)
         form = self.form(request.form)
 
         context = {

@@ -1,7 +1,5 @@
-import json
 from flask_restful import Resource, reqparse, fields, marshal_with, marshal
 from app.components.model.order import *
-from app.components.repository import order as order_repository
 
 item_format = {
     'name': fields.String,
@@ -61,8 +59,8 @@ class OrderList(Resource):
     @staticmethod
     @marshal_with(orders_list_format)
     def get():
-        public_orders = order_repository.get_orders_public()
-        return {'orders': public_orders}, 200
+        orders = Order.objects.all()
+        return {'orders': orders}, 200
 
     @staticmethod
     @marshal_with(order_format)
@@ -78,12 +76,12 @@ class OrderDetail(Resource):
     @staticmethod
     @marshal_with(order_format)
     def get(slug):
-        order = order_repository.get_order_by_slug_public(slug)
-        return json.loads(order.to_json())
+        order = Order.objects.get_or_404(slug=slug)
+        return order, 200
 
     @staticmethod
     def put(slug):
         response = order_request_parse()
-        order_model = order_repository.get_order_by_slug(slug)
+        order_model = Order.objects.get_or_404(slug=slug)
         build_order = order_builder(order_model, response)
         return build_order, 201
