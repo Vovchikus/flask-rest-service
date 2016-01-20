@@ -10,7 +10,6 @@ item_format = {
 
 order_format = {
     'article': fields.String,
-    'slug': fields.String,
     'created': fields.DateTime,
     'items': fields.List(fields.Nested(item_format))
 }
@@ -36,14 +35,12 @@ def nested_item_validator(item):
 def order_request_parse():
     order_parser = reqparse.RequestParser()
     order_parser.add_argument('article', required=True, help='Article is required')
-    order_parser.add_argument('slug', required=True, help='Slug is required')
     order_parser.add_argument('items', required=True, action='append', type=nested_item_validator)
     return order_parser.parse_args()
 
 
 def order_builder(order_model, new_data):
     order_model.article = new_data['article']
-    order_model.slug = new_data['slug']
 
     for item in new_data['items']:
         item_model = Item()
@@ -68,22 +65,22 @@ class OrderList(Resource):
         response = order_request_parse()
         order_model = Order()
         build_order = order_builder(order_model, response)
-        build_order.save()
+        build_order.save(clean=True)
         return order_model, 201
 
 
 class OrderDetail(Resource):
     @staticmethod
     @marshal_with(order_format)
-    def get(slug):
-        order = Order.objects.get_or_404(slug=slug)
+    def get(article):
+        order = Order.objects.get_or_404(slug=article)
         return order, 200
 
     @staticmethod
     @marshal_with(order_format)
-    def put(slug):
+    def put(article):
         response = order_request_parse()
-        order_model = Order.objects.get_or_404(slug=slug)
+        order_model = Order.objects.get_or_404(slug=article)
         build_order = order_builder(order_model, response)
         build_order.save()
         return order_model, 201

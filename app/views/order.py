@@ -10,15 +10,15 @@ order_map = Blueprint('orders', __name__, template_folder='templates')
 class ListView(MethodView):
     @staticmethod
     def get():
-        orders = Order.objects.get_orders_all()
+        orders = Order.objects.all()
         return render_template('orders/list.html', orders=orders)
 
 
 class DetailView(MethodView):
     form = model_form(Item, exclude=['created'])
 
-    def get_context(self, slug):
-        order = Order.objects.get_order_by_slug(slug=slug)
+    def get_context(self, article):
+        order = Order.objects.get_order_by_slug(slug=article)
         form = self.form(request.form)
 
         context = {
@@ -27,12 +27,12 @@ class DetailView(MethodView):
         }
         return context
 
-    def get(self, slug):
+    def get(self, article):
         form = self.form(request.form)
-        return render_template('orders/detail.html', order=Order.objects.get_or_404(slug=slug), form=form)
+        return render_template('orders/detail.html', order=Order.objects.get_or_404(slug=article), form=form)
 
-    def post(self, slug):
-        context = self.get_context(slug)
+    def post(self, article):
+        context = self.get_context(article)
         form = context.get('form')
         if form.validate():
             item = Item()
@@ -40,7 +40,7 @@ class DetailView(MethodView):
             order = context.get('order')
             order.items.append(item)
             order.save()
-            return redirect(url_for('orders.detail', slug=slug))
+            return redirect(url_for('orders.detail', slug=article))
         return render_template('orders/detail.html', **context)
 
 
